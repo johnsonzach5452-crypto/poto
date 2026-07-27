@@ -1,0 +1,94 @@
+{
+  "events": [
+    {
+      "event": {
+        "id": 1024787930,
+        "name": "ARI Diamondbacks @ PIT Pirates",
+        "englishName": "Pittsburgh Pirates - Arizona Diamondbacks",
+        "homeName": "PIT Pirates",
+        "awayName": "ARI Diamondbacks",
+        "start": "2026-07-27T22:40:00Z",
+        "group": "MLB",
+        "sport": "BASEBALL",
+        "state": "NOT_STARTED"
+      },
+      "betOffers": [
+        {
+          "id": 2673213384,
+          "criterion": {"id": 1001159860, "label": "Moneyline", "englishLabel": "Moneyline"},
+          "betOfferType": {"id": 2, "name": "Match"},
+          "eventId": 1024787930,
+          "outcomes": [
+            {"id": 1, "label": "PIT Pirates", "englishLabel": "Pittsburgh Pirates", "odds": 1890, "type": "OT_ONE", "oddsAmerican": "-113", "status": "OPEN"},
+            {"id": 2, "label": "ARI Diamondbacks", "englishLabel": "Arizona Diamondbacks", "odds": 1930, "type": "OT_TWO", "oddsAmerican": "-108", "status": "OPEN"}
+          ]
+        },
+        {
+          "id": 2673210499,
+          "criterion": {"id": 1001159777, "label": "Run Line", "englishLabel": "Run Line"},
+          "betOfferType": {"id": 1, "name": "Handicap"},
+          "eventId": 1024787930,
+          "outcomes": [
+            {"id": 3, "label": "PIT Pirates", "englishLabel": "Pittsburgh Pirates", "odds": 1540, "line": 1500, "type": "OT_ONE", "oddsAmerican": "-186", "status": "OPEN"},
+            {"id": 4, "label": "ARI Diamondbacks", "englishLabel": "Arizona Diamondbacks", "odds": 2500, "line": -1500, "type": "OT_TWO", "oddsAmerican": "150", "status": "OPEN"}
+          ]
+        },
+        {
+          "id": 2673295101,
+          "criterion": {"id": 1001159850, "label": "Total Runs", "englishLabel": "Total Runs"},
+          "betOfferType": {"id": 6, "name": "Over/Under"},
+          "eventId": 1024787930,
+          "outcomes": [
+            {"id": 5, "label": "Over", "englishLabel": "Over", "odds": 1960, "line": 9500, "type": "OT_OVER", "oddsAmerican": "-105", "status": "OPEN"},
+            {"id": 6, "label": "Under", "englishLabel": "Under", "odds": 1860, "line": 9500, "type": "OT_UNDER", "oddsAmerican": "-117", "status": "OPEN"}
+          ]
+        },
+        {
+          "id": 9999999001,
+          "criterion": {"id": 1001415151, "label": "Total Runs - First 5 Innings", "englishLabel": "Total Runs - First 5 Innings"},
+          "betOfferType": {"id": 6, "name": "Over/Under"},
+          "eventId": 1024787930,
+          "outcomes": [
+            {"id": 7, "label": "Over", "englishLabel": "Over", "odds": 5000, "line": 4500, "type": "OT_OVER", "oddsAmerican": "400", "status": "OPEN"},
+            {"id": 8, "label": "Under", "englishLabel": "Under", "odds": 1200, "line": 4500, "type": "OT_UNDER", "oddsAmerican": "-500", "status": "OPEN"}
+          ]
+        }
+      ]
+    },
+    {
+      "event": {
+        "id": 1024788036,
+        "name": "PHI Phillies @ MIA Marlins",
+        "englishName": "Miami Marlins - Philadelphia Phillies",
+        "homeName": "MIA Marlins",
+        "awayName": "PHI Phillies",
+        "start": "2026-07-27T22:40:00Z",
+        "group": "MLB",
+        "sport": "BASEBALL",
+        "state": "NOT_STARTED"
+      },
+      "betOffers": [
+        {
+          "id": 2673227806,
+          "criterion": {"id": 1001159860, "label": "Moneyline", "englishLabel": "Moneyline"},
+          "betOfferType": {"id": 2, "name": "Match"},
+          "eventId": 1024788036,
+          "outcomes": [
+            {"id": 11, "label": "MIA Marlins", "englishLabel": "Miami Marlins", "odds": 2600, "type": "OT_ONE", "oddsAmerican": "160", "status": "OPEN"},
+            {"id": 12, "label": "PHI Phillies", "englishLabel": "Philadelphia Phillies", "odds": 1520, "type": "OT_TWO", "oddsAmerican": "-195", "status": "OPEN"}
+          ]
+        },
+        {
+          "id": 2673227807,
+          "criterion": {"id": 1001159850, "label": "Total Runs", "englishLabel": "Total Runs"},
+          "betOfferType": {"id": 6, "name": "Over/Under"},
+          "eventId": 1024788036,
+          "outcomes": [
+            {"id": 13, "label": "Over", "englishLabel": "Over", "odds": 1890, "line": 7500, "type": "OT_OVER", "oddsAmerican": "-113", "status": "OPEN"},
+            {"id": 14, "label": "Under", "englishLabel": "Under", "odds": 1940, "line": 7500, "type": "OT_UNDER", "oddsAmerican": "-107", "status": "OPEN"}
+          ]
+        }
+      ]
+    }
+  ]
+}
