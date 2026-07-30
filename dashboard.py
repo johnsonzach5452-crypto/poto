@@ -131,11 +131,21 @@ if st.button("Scan now", type="primary"):
         except Exception as e:
             st.error(f"{prop_source} events failed: {type(e).__name__}: {e}"); st.stop()
 
-        # match Kambi <-> Odds events by full team englishName
-        oa_by_key = {}
+        # match Kambi <-> Odds events by full team name AND nearest date.
+        # The same matchup recurs on many dates; keying on teams alone would
+        # grab a future game (no props yet). We keep every candidate and pick
+        # the one whose start time is closest to the Kambi game's start.
+        from datetime import datetime, timezone
+        def _pt(s):
+            try:
+                return datetime.fromisoformat(str(s).replace("Z", "+00:00")).astimezone(timezone.utc)
+            except Exception:
+                return None
+
+        oa_by_key = {}  # team-key -> list of (id, commence_dt)
         for e in oa_events:
             key = frozenset({norm_player(e.get("home_team","")), norm_player(e.get("away_team",""))})
-            oa_by_key[key] = e.get("id")
+            oa_by_key.setdefault(key, []).append((e.get("id"), _pt(e.get("commence_time"))))
 
         pairs = []
         for wrapper in kambi_events:
@@ -145,9 +155,21 @@ if st.button("Scan now", type="primary"):
                 continue
             home_full, away_full = [x.strip() for x in eng.split(" - ", 1)]
             key = frozenset({norm_player(home_full), norm_player(away_full)})
-            oa_id = oa_by_key.get(key)
-            if oa_id:
-                pairs.append((ev.get("id"), oa_id, f"{away_full} @ {home_full}"))
+            cands = oa_by_key.get(key)
+            if not cands:
+                continue
+            kstart = _pt(ev.get("start"))
+            # choose candidate closest in time to the Kambi start (within 18h)
+            best_id, best_gap = None, None
+            for cid, cdt in cands:
+                if kstart is None or cdt is None:
+                    gap = 0
+                else:
+                    gap = abs((cdt - kstart).total_seconds())
+                if best_gap is None or gap < best_gap:
+                    best_id, best_gap = cid, gap
+            if best_id is not None and (best_gap is None or best_gap <= 18 * 3600):
+                pairs.append((ev.get("id"), best_id, f"{away_full} @ {home_full}"))
 
         st.success(f"{len(pairs)} games matched for prop scanning "
                    f"({len(kambi_events)} Kambi / {len(oa_events)} Odds API).")
@@ -184,7 +206,7 @@ if st.button("Scan now", type="primary"):
 
         if show_diag:
             st.markdown("### Diagnostics")
-            st.caption(f"Odds API prop calls used this scan: {calls_used} "
+            st.caption(f"Prop calls used this scan: {calls_used} "
                        f"(each costs more quota than a game-line scan).")
             st.dataframe(
                 [{"game": g, "status": stt, "kambi props": kp, "odds props": op}
