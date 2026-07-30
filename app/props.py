@@ -58,6 +58,34 @@ def norm_player(name: str) -> str:
     return re.sub(r"\s+", " ", low).strip()
 
 
+# Words that sometimes trail a player name in a book's description field.
+_STOP_TOKENS = {"strikeouts", "thrown", "outs", "recorded", "total", "player",
+                "pitcher", "the", "by"}
+
+
+def player_match_key(name: str) -> str:
+    """A tolerant key for matching the SAME pitcher across feeds that spell
+    the first name differently ('Matt' vs 'Matthew', 'Mike' vs 'Michael').
+
+    Strategy: strip accents/suffixes/parentheticals, then key on
+    first-initial + last-name. 'Matt Liberatore' and 'Matthew Liberatore'
+    both -> 'm liberatore'; 'David Peterson (CHC)' -> 'd peterson'.
+
+    Collision risk (same initial + surname, same game) is negligible for
+    starting pitchers, and matching is already scoped per event.
+    """
+    if not name:
+        return ""
+    n = re.sub(r"\(.*?\)", " ", name)             # drop "(CHC)" etc.
+    n = norm_player(n)                            # accents, punct, suffixes
+    tokens = [t for t in n.split() if t not in _STOP_TOKENS]
+    if not tokens:
+        return ""
+    if len(tokens) == 1:
+        return tokens[0]
+    return f"{tokens[0][0]} {tokens[-1]}"
+
+
 def _accepted_stat(label: str) -> Optional[str]:
     # Reject the "N+" ladder outright.
     if re.search(r"\d\+", label):
@@ -121,7 +149,7 @@ def parse_props(raw: dict) -> list[PropOutcome]:
             player = oc.get("participant", "")
             out.append(PropOutcome(
                 event_id=event_id, event_name=event_name,
-                player=player, player_key=norm_player(player),
+                player=player, player_key=player_match_key(player),
                 stat=stat, side=side, line=round(line / 1000.0, 2),
                 american=american, decimal=round(odds_milli / 1000.0, 4),
                 status="OPEN", source="kambi",

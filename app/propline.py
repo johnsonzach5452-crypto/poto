@@ -13,7 +13,7 @@ from __future__ import annotations
 import requests
 
 from .odds_client import SPORT_KEYS
-from .props import PROP_STATS, PropOutcome, norm_player
+from .props import PROP_STATS, PropOutcome, norm_player, player_match_key
 from .matcher import american_to_decimal
 
 BASE = "https://api.prop-line.com/v1"
@@ -72,7 +72,7 @@ def parse_props(raw: dict) -> list[PropOutcome]:
                 player = oc.get("description", "")
                 out.append(PropOutcome(
                     event_id=None, event_name="", player=player,
-                    player_key=norm_player(player), stat=stat, side=side,
+                    player_key=player_match_key(player), stat=stat, side=side,
                     line=float(point), american=int(price),
                     decimal=american_to_decimal(int(price)),
                     status="OPEN", source=book,

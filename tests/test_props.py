@@ -57,6 +57,36 @@ def test_prop_matching_and_ev():
     assert perez, f"expected a Perez Over signal, got {[(s.player,s.side,s.ev_pct) for s in sigs]}"
     print(f"  Perez Over 3.5 K: fair={perez[0].fair_prob}, EV={perez[0].ev_pct}%, verdict={perez[0].verdict}")
 
+
+
+def test_matt_matthew_cross_feed_match():
+    """Kambi 'Matt Liberatore' must match PropLine 'Matthew Liberatore'."""
+    from app.props import PropOutcome, player_match_key
+    from app.propline import parse_props as pl_parse
+    from app.props_odds import match_props
+    from app.matcher import american_to_decimal
+    # Kambi side: Matt Liberatore strikeouts Over/Under 4.5
+    kambi = [
+        PropOutcome(None, "", "Matt Liberatore", player_match_key("Matt Liberatore"),
+                    "strikeouts", "over", 4.5, 120, american_to_decimal(120), "OPEN", "kambi"),
+        PropOutcome(None, "", "Matt Liberatore", player_match_key("Matt Liberatore"),
+                    "strikeouts", "under", 4.5, -150, american_to_decimal(-150), "OPEN", "kambi"),
+    ]
+    # PropLine side: Matthew Liberatore, 3 sharp books
+    raw = {"bookmakers": []}
+    for bk in ["pinnacle", "novig", "betmgm"]:
+        raw["bookmakers"].append({"key": bk, "markets": [{"key": "pitcher_strikeouts",
+            "outcomes": [
+                {"name": "Over", "description": "Matthew Liberatore", "price": 130, "point": 4.5},
+                {"name": "Under", "description": "Matthew Liberatore", "price": -160, "point": 4.5},
+            ]}]})
+    oprops = pl_parse(raw)
+    sigs = match_props(kambi, oprops, min_sources=3)
+    assert sigs, "Matt/Matthew failed to match across feeds"
+    print(f"  Matt↔Matthew matched: {len(sigs)} signal(s), "
+          f"top EV {sigs[0].ev_pct}% on {sigs[0].player}")
+
+
 if __name__ == "__main__":
     for name, fn in list(globals().items()):
         if name.startswith("test_") and callable(fn):

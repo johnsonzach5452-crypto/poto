@@ -15,7 +15,7 @@ import requests
 
 from .odds_client import SPORT_KEYS, SHARP_BOOKS
 from .matcher import american_to_prob, american_to_decimal
-from .props import PropOutcome, norm_player, PROP_STATS
+from .props import PropOutcome, norm_player, player_match_key, PROP_STATS
 
 BASE = "https://api.the-odds-api.com/v4"
 
@@ -81,7 +81,7 @@ def parse_props_odds(raw: dict) -> list[PropOutcome]:
                     continue
                 out.append(PropOutcome(
                     event_id=None, event_name="", player=player,
-                    player_key=norm_player(player), stat=stat, side=side,
+                    player_key=player_match_key(player), stat=stat, side=side,
                     line=float(point), american=int(price),
                     decimal=american_to_decimal(int(price)),
                     status="OPEN", source=book,
